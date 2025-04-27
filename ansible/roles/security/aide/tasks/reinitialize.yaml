@@ -1,0 +1,11 @@
+---
+- name: Reinitialize AIDE database
+  command: aide --init
+  args:
+    creates: /var/lib/aide/aide.db.new.gz
+
+- name: Replace AIDE database after upgrade
+  copy:
+    src: /var/lib/aide/aide.db.new.gz
+    dest: /var/lib/aide/aide.db.gz
+    remote_src: yes

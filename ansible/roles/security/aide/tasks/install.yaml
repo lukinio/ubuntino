@@ -1,0 +1,27 @@
+---
+- name: Install AIDE
+  become: yes
+  package:
+    name: aide
+    state: present
+
+- name: Initialize AIDE database
+  become: yes
+  command: aide --init --config /etc/aide/aide.conf
+  args:
+    creates: /var/lib/aide/aide.db.new.gz
+
+- name: Replace initial AIDE database
+  become: yes
+  copy:
+    src: /var/lib/aide/aide.db.new.gz
+    dest: /var/lib/aide/aide.db.gz
+    remote_src: yes
+
+- name: Configure AIDE cron job
+  become: yes
+  cron:
+    name: "Daily AIDE check"
+    user: root
+    job: "aide --check > /var/log/aide/aide.log 2>&1"
+    state: present

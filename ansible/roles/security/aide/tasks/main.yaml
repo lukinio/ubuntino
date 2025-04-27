@@ -1,0 +1,7 @@
+---
+# Include tasks based on variables
+- include_tasks: install.yaml
+  when: aide_install | default(false)
+
+- include_tasks: reinitialize.yaml
+  when: aide_reinitialize | default(false)

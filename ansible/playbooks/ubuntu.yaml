@@ -4,8 +4,11 @@
     hosts: local
     gather_facts: yes
     roles:
-
-        - role: network/arpwatch
+        - role: security/aide
+          vars:
+            aide_install: true
+            aide_reinitialize: true
+        # - role: network/arpwatch
 
         # - role: network/nftables
         #   vars:
