@@ -3,6 +3,7 @@
   hosts: local
   gather_facts: yes
   roles:
+    - role: security/usbguard
     - role: security/kernel
     - role: security/login_defs
     - role: security/banner
