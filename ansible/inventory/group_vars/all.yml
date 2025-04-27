@@ -1,0 +1,4 @@
+---
+user: "{{ lookup('env', 'USER') }}"
+ansible_python_interpreter: "/home/{{ user }}/ansible_venv/bin/python3"
+apt_gpg_dir: /etc/apt/trusted.gpg.d

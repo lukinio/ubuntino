@@ -1,0 +1,8 @@
+---
+- name: Ubuntu playbook
+  hosts: local
+  gather_facts: yes
+  roles:
+    - role: security/lynis
+
+

@@ -1,0 +1,34 @@
+---
+- name: Add Lynis GPG key
+  become: yes
+  ansible.builtin.shell: |
+    curl -fsSL {{ lynis_gpg_key_url }} | gpg --dearmor -o {{ lynis_gpg_file }}
+  args:
+    creates: "{{ lynis_gpg_file }}"
+
+- name: Ensure Lynis repository is configured
+  become: yes
+  ansible.builtin.template:
+    src: lynis.list.j2
+    dest: /etc/apt/sources.list.d/lynis.list
+    owner: root
+    group: root
+    mode: "0644"
+
+
+- name: Add Lynis APT preferences
+  become: yes
+  ansible.builtin.copy:
+    dest: /etc/apt/preferences.d/lynis
+    content: |
+      Package: lynis
+      Pin: origin "packages.cisofy.com"
+      Pin-Priority: 1001
+
+- name: Install Lynis
+  become: yes
+  ansible.builtin.apt:
+    name: lynis
+    state: present
+    default_release: "{{ ansible_facts['lsb']['codename'] }}"
+    update_cache: yes

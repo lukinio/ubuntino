@@ -1,0 +1,4 @@
+---
+lynis_repo_url: "https://packages.cisofy.com/community/lynis/deb/"
+lynis_gpg_key_url: "https://packages.cisofy.com/keys/cisofy-software-public.key"
+lynis_gpg_file: "{{ apt_gpg_dir }}/lynis.gpg"
