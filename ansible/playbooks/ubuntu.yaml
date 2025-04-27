@@ -4,10 +4,13 @@
     hosts: local
     gather_facts: yes
     roles:
-        - role: dev/vscode
-          vars:
-            install_vscode: true
-            install_plugins: true
+
+        - role: dev/rust
+
+        # - role: dev/vscode
+        #   vars:
+        #     install_vscode: true
+        #     install_plugins: true
 
         # - role: dev/docker
         # - role: common/brave

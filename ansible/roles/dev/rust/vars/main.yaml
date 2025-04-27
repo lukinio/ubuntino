@@ -1,0 +1,8 @@
+# Specify the desired Rust version or leave as 'latest' for the latest version
+rust_version: latest
+
+# List of cargo plugins to install
+cargo_plugins:
+  - cargo-watch
+  - cargo-audit
+  - cargo-deny

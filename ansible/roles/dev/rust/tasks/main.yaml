@@ -1,0 +1,52 @@
+---
+- name: Ensure dependencies are installed
+  become: yes
+  ansible.builtin.package:
+    name:
+      - curl
+      - gcc
+      - make
+    state: present
+
+- name: Download Rust installer
+  ansible.builtin.get_url:
+    url: https://sh.rustup.rs
+    dest: /tmp/rustup-init.sh
+    mode: '0755'
+
+- name: Install Rust
+  ansible.builtin.shell: |
+    /tmp/rustup-init.sh -y {{ '--default-toolchain ' + rust_version if rust_version != 'latest' else '' }}
+  args:
+    creates: ~/.cargo/bin/rustc
+
+- name: Add Cargo bin directory to PATH in profile
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    marker: "# {mark} Managed by Ansible for Rust"
+    block: |
+      export PATH="$HOME/.cargo/bin:$PATH"
+    state: present
+
+- name: Verify Rust installation
+  ansible.builtin.command:
+    cmd: rustc --version
+  environment:
+    PATH: "{{ ansible_env.HOME }}/.cargo/bin:{{ ansible_env.PATH }}"
+  register: rust_version_check
+
+- debug:
+    msg: "Rust installed version: {{ rust_version_check.stdout }}"
+
+- name: Install specified cargo packages
+  ansible.builtin.shell: |
+    ~/.cargo/bin/cargo install {{ item }}
+  with_items: "{{ cargo_plugins }}"
+  args:
+    creates: "~/.cargo/bin/{{ item }}"
+  environment:
+    PATH: "{{ ansible_env.HOME }}/.cargo/bin:{{ ansible_env.PATH }}"
+  register: cargo_install_results
+
+- debug:
+    msg: "Installed cargo packages: {{ cargo_install_results.results | map(attribute='item') | list }}"
