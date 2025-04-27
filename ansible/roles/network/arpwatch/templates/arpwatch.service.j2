@@ -1,0 +1,24 @@
+[Unit]
+Description=arpwatch service which keeps track on interface %I
+Documentation=man:arpwatch(8)
+PartOf=arpwatch.service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+PrivateTmp=true
+Type=forking
+EnvironmentFile=-/etc/arpwatch/%i.iface
+ExecStartPre=/usr/bin/touch -a %i.dat
+ExecStartPre=/bin/chown {{ arpwatch_user }} %i.dat
+ExecStart=/usr/sbin/arpwatch -u {{ arpwatch_user }} -i %i -f %i.dat {{ arpwatch_options }}
+Restart=on-failure
+ProtectSystem=yes
+# CAP_NET_ADMIN, CAP_NET_RAW: grab the arp packages using libpcap
+# CAP_SETGID, CAP_SETUID: allow arpwatch to drop privs
+# CAP_CHOWN, CAP_DAC_OVERRIDE, CAP_FOWNER: needed for creating the .dat file
+CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_NET_ADMIN CAP_NET_RAW CAP_SETGID CAP_SETUID
+WorkingDirectory={{ arpwatch_workdir }}
+
+[Install]
+WantedBy=multi-user.target

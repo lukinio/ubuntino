@@ -1,0 +1,18 @@
+---
+- name: Install arpwatch
+  become: yes
+  ansible.builtin.package:
+    name: arpwatch
+    state: present
+
+- name: Configure  arpwatch@{{ arpwatch_interface }} service
+  become: yes
+  ansible.builtin.template:
+    src: arpwatch.service.j2
+    dest: "/etc/systemd/system/arpwatch@{{ arpwatch_interface }}.service"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Reload systemd daemon
+    - "Enable and restart arpwatch@{{ arpwatch_interface }}"

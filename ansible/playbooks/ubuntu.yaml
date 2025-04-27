@@ -5,10 +5,12 @@
     gather_facts: yes
     roles:
 
-        - role: network/nftables
-          vars:
-            disable_iptables: true
-            enable_nftables: true
+        - role: network/arpwatch
+
+        # - role: network/nftables
+        #   vars:
+        #     disable_iptables: true
+        #     enable_nftables: true
 
         # - role: dev/pyenv
         #   vars:
