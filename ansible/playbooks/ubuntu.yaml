@@ -4,5 +4,6 @@
   gather_facts: yes
   roles:
     - role: security/lynis
+    - role: security/dns_over_tls
 
 
