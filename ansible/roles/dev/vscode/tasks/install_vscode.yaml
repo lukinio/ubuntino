@@ -1,0 +1,23 @@
+---
+- name: Add VS Code GPG key
+  become: yes
+  ansible.builtin.shell: |
+    curl -fsSL {{ vscode_gpg_key_url }} | gpg --dearmor -o {{ vscode_gpg_file }}
+  args:
+    creates: "{{ vscode_gpg_file }}"
+
+- name: Configure VS Code repository
+  become: yes
+  ansible.builtin.template:
+    src: vscode.list.j2
+    dest: /etc/apt/sources.list.d/vscode.list
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Install Visual Studio Code
+  become: yes
+  ansible.builtin.package:
+    name: code
+    state: present
+    update_cache: yes

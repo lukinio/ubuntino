@@ -1,15 +1,19 @@
 ---
-- name: Ubuntu playbook
-  hosts: local
-  gather_facts: yes
-  roles:
-    - role: dev/docker
-    - role: common/brave
-    - role: security/usbguard
-    - role: security/kernel
-    - role: security/login_defs
-    - role: security/banner
-    - role: security/lynis
-    - role: security/dns_over_tls
+-
+    name: Ubuntu playbook
+    hosts: local
+    gather_facts: yes
+    roles:
+        - role: dev/vscode
+          vars:
+            install_vscode: true
+            install_plugins: true
 
-
+        # - role: dev/docker
+        # - role: common/brave
+        # - role: security/usbguard
+        # - role: security/kernel
+        # - role: security/login_defs
+        # - role: security/banner
+        # - role: security/lynis
+        # - role: security/dns_over_tls

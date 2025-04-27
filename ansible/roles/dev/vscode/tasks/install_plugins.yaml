@@ -1,0 +1,10 @@
+- name: Ensure "code" command is available
+  command: which code
+  register: code_cmd
+  failed_when: code_cmd.rc != 0
+
+- name: Install VS Code extensions
+  command: "code --install-extension {{ item }} --force"
+  loop: "{{ vscode_extensions }}"
+  ignore_errors: true
+
