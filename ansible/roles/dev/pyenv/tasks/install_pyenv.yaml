@@ -1,0 +1,28 @@
+---
+- name: Install build dependencies for Python
+  become: yes
+  ansible.builtin.dnf:
+    name: "{{ pyenv_dependencies }}"
+    state: present
+
+- name: Install pyenv using the pyenv.run script
+  shell: |
+    curl https://pyenv.run | bash
+  args:
+    creates: "{{ pyenv_root }}/bin/pyenv"
+
+- name: Add pyenv to shell environment
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    state: present
+    marker: "# {mark} ANSIBLE MANAGED BLOCK for pyenv"
+    block: |
+      export PYENV_ROOT="{{ pyenv_root }}"
+      export PATH="{{ pyenv_root }}/bin:$PATH"
+      eval "$(pyenv init --path)"
+      eval "$(pyenv init -)"
+
+- name: Manually reload the shell
+  shell: source "{{ ansible_env.HOME }}/.bashrc"
+  args:
+    executable: /bin/bash

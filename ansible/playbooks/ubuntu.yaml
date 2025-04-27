@@ -5,7 +5,12 @@
     gather_facts: yes
     roles:
 
-        - role: dev/rust
+        - role: dev/pyenv
+          vars:
+            install_pyenv: true
+            install_python: true
+
+        # - role: dev/rust
 
         # - role: dev/vscode
         #   vars:

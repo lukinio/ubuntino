@@ -1,0 +1,6 @@
+---
+- include_tasks: install_pyenv.yaml
+  when: install_pyenv | default(false)
+
+- include_tasks: install_python.yaml
+  when: install_python | default(false)
