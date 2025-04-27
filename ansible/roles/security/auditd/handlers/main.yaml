@@ -1,0 +1,12 @@
+---
+- name: Reload systemd daemon
+  become: yes
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Restart auditd service
+  become: yes
+  ansible.builtin.service:
+    name: auditd
+    enabled: yes
+    state: restarted

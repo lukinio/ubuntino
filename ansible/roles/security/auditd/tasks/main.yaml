@@ -1,0 +1,25 @@
+---
+- name: Install auditd
+  become: yes
+  package:
+    name: auditd
+    state: present
+
+- name: Ensure auditd service is enabled and running
+  become: yes
+  service:
+    name: auditd
+    state: started
+    enabled: true
+
+- name: Deploy audit rules
+  become: yes
+  template:
+    src: audit.rules.j2
+    dest: /etc/audit/rules.d/audit.rules
+    owner: root
+    group: root
+    mode: "0640"
+  notify:
+    - Reload systemd daemon
+    - Restart auditd service
