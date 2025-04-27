@@ -1,0 +1,9 @@
+---
+- name: Apply sysctl changes
+  become: yes
+  ansible.builtin.command: sysctl --system
+
+- name: Reload systemd configuration
+  become: yes
+  ansible.builtin.systemd:
+    daemon_reload: yes

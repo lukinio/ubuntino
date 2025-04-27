@@ -1,0 +1,6 @@
+# Blacklist unnecessary kernel modules
+{% for module in disable_kernel_modules %}
+blacklist {{ module }}
+install {{ module }} /bin/false
+
+{% endfor %}

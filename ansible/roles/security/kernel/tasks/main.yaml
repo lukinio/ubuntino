@@ -1,0 +1,74 @@
+---
+- name: Harden kernel parameters
+  become: yes
+  ansible.builtin.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_file: "/etc/sysctl.d/hardening.conf"
+    state: present
+  with_items: "{{ sysctl_parameters }}"
+  register: sysctl_result
+  changed_when: sysctl_result.changed
+  notify:
+    - Apply sysctl changes
+
+- name: Configure limits to disable core dumps
+  become: yes
+  ansible.builtin.template:
+    src: limits.conf.j2
+    dest: /etc/security/limits.d/disable_core_dumps.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd configuration
+
+- name: Ensure coredump configuration is in place
+  become: yes
+  ansible.builtin.template:
+    src: coredump.conf.j2
+    dest: /etc/systemd/coredump.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd configuration
+
+- name: Add ulimit configuration to disable core dumps
+  become: yes
+  ansible.builtin.template:
+    src: disable-core-dumps.sh.j2
+    dest: /etc/profile.d/disable-core-dumps.sh
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure required directories exist
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /etc/modprobe.d
+
+- name: Create blacklist configuration file for unnecessary kernel modules
+  become: yes
+  ansible.builtin.template:
+    src: blacklist.conf.j2
+    dest: "{{ blacklist_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Unload unnecessary kernel modules if currently loaded
+  become: yes
+  ansible.builtin.command: "modprobe -r {{ item }}"
+  loop: "{{ disable_kernel_modules }}"
+  register: unload_result
+  failed_when: unload_result.rc != 0 and 'not found' not in unload_result.stderr
+  changed_when: unload_result.rc == 0
+
+- name: Update initramfs
+  become: yes
+  ansible.builtin.command: "update-initramfs -u"
