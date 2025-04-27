@@ -1,0 +1,9 @@
+---
+# Include tasks based on variables
+- name: Include snapd removal tasks
+  include_tasks: remove_snapd.yaml
+  when: remove_snapd | default(false)
+
+- name: Ubuntu cleanup tasks
+  include_tasks: cleanup.yaml
+  when: cleanup | default(false)

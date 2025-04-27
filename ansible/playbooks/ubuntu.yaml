@@ -5,7 +5,12 @@
     gather_facts: yes
     roles:
 
-        - role: security/sysstat
+        - role: ubuntu
+          vars:
+            remove_snapd: true
+            cleanup: true
+
+        # - role: security/sysstat
         # - role: security/auditd
 
         # - role: security/aide

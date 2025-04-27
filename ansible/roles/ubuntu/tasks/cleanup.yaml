@@ -1,0 +1,41 @@
+---
+-
+    name: Remove unnecessary packages
+    vars:
+        remove_list:
+            - avahi*
+            - dovecot-core
+            - openbsd-inetd
+            - bind9
+            - samba
+            - cups
+            - cups-daemon
+            - apache2
+            - postgres*
+            - whoopsie
+            - exim4
+            - exim4-daemon-light
+            - rpcbind
+            - openssh-server
+            - apache2*
+            - postfix
+            - rygel
+            - telnet
+            - mscompress
+            - ntfs-3g
+            - mobile-broadband-provider-info
+    become: true
+    command: apt remove --purge -y {{ remove_list | join(' ') }}
+
+-
+    name: Auto remove
+    become: true
+    command: apt autoremove -y
+
+-
+    name: Remove files
+    become: true
+    vars:
+        remove_list:
+            - /usr/share/hplip
+    command: rm -rf {{ remove_list | join(' ') }}
