@@ -1,0 +1,95 @@
+- name: Remove Podman and related packages
+  become: yes
+  ansible.builtin.package:
+    name:
+      - podman
+      - podman-docker
+      - buildah
+      - toolbox
+    state: absent
+
+- name: Remove old versions of Docker
+  become: yes
+  ansible.builtin.package:
+    name:
+      - docker
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine
+    state: absent
+
+- name: Ensure required dependencies for Docker repository are installed
+  become: yes
+  ansible.builtin.package:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+
+- name: Add Docker GPG key
+  become: yes
+  ansible.builtin.shell: |
+    curl -fsSL {{ docker_gpg_key_url }} | gpg --dearmor -o {{ docker_gpg_file }}
+  args:
+    creates: "{{ docker_gpg_file }}"
+
+
+- name: Add Docker repository
+  become: yes
+  ansible.builtin.template:
+    src: docker.list.j2
+    dest: /etc/apt/sources.list.d/docker.list
+    owner: root
+    group: root
+    mode: "0644"
+
+
+- name: Refresh apt cache
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+
+- name: Install Docker packages
+  become: yes
+  ansible.builtin.package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+
+- name: Add users to the docker group
+  become: yes
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  with_items: "{{ docker_users }}"
+
+- name: Activate docker group
+  ansible.builtin.shell: newgrp docker
+
+- name: Start and enable Docker service
+  become: yes
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Verify Docker installation
+  become: yes
+  ansible.builtin.command: docker --version
+  register: docker_version_output
+
+- name: Debug Docker version
+  ansible.builtin.debug:
+    msg: "{{ docker_version_output.stdout.splitlines() }}"
