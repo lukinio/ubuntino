@@ -1,0 +1,4 @@
+---
+brave_gpg_key_url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+brave_gpg_file: "{{ apt_gpg_dir }}/brave.gpg"
+brave_repo_file: /etc/apt/sources.list.d/brave-browser.list
