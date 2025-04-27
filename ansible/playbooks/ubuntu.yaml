@@ -3,6 +3,7 @@
   hosts: local
   gather_facts: yes
   roles:
+    - role: security/login_defs
     - role: security/banner
     - role: security/lynis
     - role: security/dns_over_tls

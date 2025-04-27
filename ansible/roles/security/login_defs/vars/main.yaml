@@ -1,0 +1,8 @@
+---
+password_hashing_method: "SHA512"
+password_min_rounds: 5000
+password_min_age: 7
+password_max_age: 90
+default_umask: "027"
+
+tmout_value: 600
