@@ -1,0 +1,34 @@
+---
+- name: Install sysstat package
+  ansible.builtin.package:
+    name: sysstat
+    state: present
+  become: yes
+
+- name: Enable sysstat service
+  become: yes
+  ansible.builtin.service:
+    name: sysstat
+    enabled: yes
+    state: started
+
+- name: Configure sysstat
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "{{ sysstat_config_file }}"
+    regexp: '^ENABLED=.*'
+    line: 'ENABLED="true"'
+    create: yes
+  notify:
+    - Restart sysstat service
+
+- name: Configure sysstat cron job
+  ansible.builtin.template:
+    src: sysstat_cron.j2
+    dest: "{{ sysstat_cron_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - Restart sysstat service

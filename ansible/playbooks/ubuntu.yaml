@@ -4,7 +4,9 @@
     hosts: local
     gather_facts: yes
     roles:
-        - role: security/auditd
+
+        - role: security/sysstat
+        # - role: security/auditd
 
         # - role: security/aide
         #   vars:

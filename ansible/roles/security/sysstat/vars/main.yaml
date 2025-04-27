@@ -1,0 +1,4 @@
+---
+sysstat_config_file: /etc/default/sysstat
+sysstat_cron_file: /etc/cron.d/sysstat
+sysstat_collect_interval: 10
