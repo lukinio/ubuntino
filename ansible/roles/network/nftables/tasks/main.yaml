@@ -1,0 +1,7 @@
+---
+- include_tasks: disable_iptables.yaml
+  when: disable_iptables | default(false)
+
+- name: Configure nftables (Debian)
+  include_tasks: enable_nftables.yaml
+  when: enable_nftables | default(false)

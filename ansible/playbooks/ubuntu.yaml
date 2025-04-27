@@ -5,10 +5,15 @@
     gather_facts: yes
     roles:
 
-        - role: dev/pyenv
+        - role: network/nftables
           vars:
-            install_pyenv: true
-            install_python: true
+            disable_iptables: true
+            enable_nftables: true
+
+        # - role: dev/pyenv
+        #   vars:
+        #     install_pyenv: true
+        #     install_python: true
 
         # - role: dev/rust
 

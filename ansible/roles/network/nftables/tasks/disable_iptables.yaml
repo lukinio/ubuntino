@@ -1,0 +1,28 @@
+---
+- name: Check if iptables kernel module is loaded
+  become: yes
+  ansible.builtin.command:
+    cmd: lsmod | grep '^ip_tables'
+  register: iptables_module_check
+  failed_when: false
+  changed_when: false
+
+- name: Unload iptables kernel module
+  become: yes
+  ansible.builtin.command:
+    cmd: "modprobe -r ip_tables"
+  when: iptables_module_check.rc == 0
+
+- name: Prevent iptables kernel modules from loading
+  become: yes
+  ansible.builtin.blockinfile:
+    create: yes
+    path: /etc/modprobe.d/blacklist-iptables.conf
+    marker: "# {mark} ANSIBLE MANAGED BLACKLIST IPTABLES"
+    block: |
+      # Blacklist iptables modules
+      blacklist ip_tables
+      blacklist x_tables
+      blacklist nf_tables_compat
+  notify: Update initramfs
+

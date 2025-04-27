@@ -1,0 +1,23 @@
+---
+- name: Reload nftables
+  become: yes
+  ansible.builtin.service:
+    name: nftables
+    state: restarted
+  notify: Ensure nftables service is enabled
+
+- name: Ensure nftables service is enabled
+  become: yes
+  ansible.builtin.systemd:
+    name: nftables
+    enabled: yes
+
+- name: Update initramfs
+  become: yes
+  ansible.builtin.command: "update-initramfs -u"
+
+- name: Restart rsyslog
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted
+  become: yes
