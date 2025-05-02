@@ -3,6 +3,6 @@ rust_version: latest
 
 # List of cargo plugins to install
 cargo_plugins:
-  - cargo-watch
-  - cargo-audit
-  - cargo-deny
+    - cargo-watch
+    - cargo-audit
+    - cargo-deny

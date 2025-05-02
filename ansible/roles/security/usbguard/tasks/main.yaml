@@ -1,38 +1,38 @@
 - name: Install USBGuard package
   become: yes
   ansible.builtin.package:
-    name: usbguard
-    state: latest
+      name: usbguard
+      state: latest
 
 - name: Ensure USBGuard service is enabled and started
   become: yes
   ansible.builtin.service:
-    name: usbguard
-    state: started
-    enabled: yes
+      name: usbguard
+      state: started
+      enabled: yes
 
 - name: Configure USBGuard
   become: yes
   ansible.builtin.template:
-    src: usbguard.conf.j2
-    dest: /etc/usbguard/usbguard.conf
-    owner: root
-    group: root
-    mode: 0600
-    backup: yes
+      src: usbguard.conf.j2
+      dest: /etc/usbguard/usbguard.conf
+      owner: root
+      group: root
+      mode: 0600
+      backup: yes
   notify: Restart USBGuard service
 
 - name: Ensure USBGuard rule set is initialized
   become: yes
   ansible.builtin.command: usbguard generate-policy > /etc/usbguard/rules.conf
   args:
-    creates: /etc/usbguard/rules.conf
+      creates: /etc/usbguard/rules.conf
 
 - name: Ensure permissions for USBGuard configuration directory
   become: yes
   ansible.builtin.file:
-    path: /etc/usbguard
-    state: directory
-    mode: '0700'
-    owner: root
-    group: root
+      path: /etc/usbguard
+      state: directory
+      mode: "0700"
+      owner: root
+      group: root

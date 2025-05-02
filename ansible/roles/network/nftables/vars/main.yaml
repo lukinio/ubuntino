@@ -8,17 +8,19 @@ nftables_conf: "/etc/sysconfig/nftables.conf"
 nftables_rules: "/etc/nftables/nftables.nft"
 
 # Allowed Services
-nftables_allowed_services: []
+nftables_allowed_services:
+    []
 
-  # - name: "ssh"
-  #   port: 22
-  #   protocol: "tcp"
+    # - name: "ssh"
+    #   port: 22
+    #   protocol: "tcp"
 
 # Allowed IPs (Optional)
-nftables_allowed_ips: []
-  # - source: "192.168.50.0/24"  # Example trusted subnet
-  #   port: 22
-  #   protocol: "tcp"
+nftables_allowed_ips:
+    []
+    # - source: "192.168.50.0/24"  # Example trusted subnet
+    #   port: 22
+    #   protocol: "tcp"
 
 # Additional Rules (Optional)
 nftables_custom_rules: []

@@ -7,3 +7,7 @@
 - name: Ubuntu cleanup tasks
   include_tasks: cleanup.yaml
   when: cleanup | default(false)
+
+- name: Ubuntu update
+  include_tasks: update.yaml
+  when: update | default(false)

@@ -2,11 +2,11 @@
 - name: Reload systemd daemon
   become: yes
   ansible.builtin.systemd:
-    daemon_reload: yes
+      daemon_reload: yes
 
 - name: "Enable and restart arpwatch@{{ arpwatch_interface }}"
   become: yes
   ansible.builtin.systemd:
-    name: "arpwatch@{{ arpwatch_interface }}"
-    enabled: yes
-    state: restarted
+      name: "arpwatch@{{ arpwatch_interface }}"
+      enabled: yes
+      state: restarted

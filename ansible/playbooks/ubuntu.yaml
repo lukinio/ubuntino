@@ -1,47 +1,47 @@
 ---
--
-    name: Ubuntu playbook
-    hosts: local
-    gather_facts: yes
-    roles:
-
-        - role: ubuntu
-          vars:
+- name: Ubuntu playbook
+  hosts: local
+  gather_facts: yes
+  roles:
+      - role: ubuntu
+        vars:
             remove_snapd: true
             cleanup: true
+            update: true
 
-        # - role: security/sysstat
-        # - role: security/auditd
+      - role: security/lynis
+      #   - role: security/sysstat
+      - role: security/auditd
 
-        # - role: security/aide
-        #   vars:
-        #     aide_install: true
-        #     aide_reinitialize: true
+      #   - role: security/aide
+      #     vars:
+      #         aide_install: false
+      #         aide_reinitialize: false
 
-        # - role: network/arpwatch
+      # - role: network/arpwatch
 
-        # - role: network/nftables
-        #   vars:
-        #     disable_iptables: true
-        #     enable_nftables: true
+      - role: network/nftables
+        vars:
+            disable_iptables: true
+            enable_nftables: true
 
-        # - role: dev/pyenv
-        #   vars:
-        #     install_pyenv: true
-        #     install_python: true
+      # - role: dev/pyenv
+      #   vars:
+      #     install_pyenv: true
+      #     install_python: true
 
-        # - role: dev/rust
+      #   - role: dev/rust
 
-        # - role: dev/vscode
-        #   vars:
-        #     install_vscode: true
-        #     install_plugins: true
+      #   - role: dev/vscode
+      #     vars:
+      #         install_vscode: true
+      #         install_plugins: true
+      #         install_config: true
 
-        # - role: dev/docker
-        # - role: common/brave
-        # - role: security/usbguard
-        # - role: security/kernel
-        # - role: security/login_defs
-        # - role: security/banner
-        # - role: security/lynis
-        # - role: security/dns_over_tls
+      #   - role: dev/docker
+      - role: common/brave
+      #   - role: security/usbguard
+      #   - role: security/kernel
+      #   - role: security/login_defs
+      #   - role: security/banner
+      #   - role: security/dns_over_tls

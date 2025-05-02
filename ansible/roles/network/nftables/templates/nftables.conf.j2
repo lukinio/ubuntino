@@ -6,56 +6,67 @@ flush ruleset
 # 1) FILTER TABLE (INET)
 ############################
 table inet filter {
+    # Cloudflare DoT endpoint sets
+    set cloudflare_dot4 {
+        type ipv4_addr; elements = { 1.1.1.1, 1.0.0.1 }
+    }
+    set cloudflare_dot6 {
+        type ipv6_addr; elements = { 2606:4700:4700::1111, 2606:4700:4700::1001 }
+    }
 
-  chain input {
-    type filter hook input priority 0; policy drop;
+    chain input {
+        type filter hook input priority 0; policy drop;
 
-    # 1. Accept loopback traffic
-    iifname "lo" accept
+        # 1. Accept loopback traffic
+        iifname "lo" accept
 
-    # 2. Accept established/related
-    ct state { established, related } accept
+        # 2. Accept established/related
+        ct state { established, related } accept
 
-    # 3. Allow traffic from Docker bridge to host
-    #    (required if containers need to access host services)
-    iifname "docker0" accept
+        # 3. Allow traffic from Docker bridge to host
+        #    (required if containers need to access host services)
+        iifname "docker0" accept
 
-    # 4. LOG & DROP ICMP (IPv4)
-    ip protocol icmp icmp type echo-request log prefix "NFT-ICMP-ECHO: " group 0
-    ip protocol icmp icmp type echo-request drop
-    ip protocol icmp log prefix "NFT-ICMP: " group 0
-    ip protocol icmp drop
+        # -- Allow & log Cloudflare DNS-over-TLS --
+        tcp dport 853 ip daddr @cloudflare_dot4 log prefix "NFT-IN-DOT_OUT4: " ct state new accept
+        tcp dport 853 ip6 daddr @cloudflare_dot6 log prefix "NFT-IN-DOT_OUT6: " ct state new accept
 
-    # 5. LOG & DROP ICMPv6 (IPv6)
-    ip6 nexthdr icmpv6 icmpv6 type echo-request log prefix "NFT-ICMPv6-ECHO: " group 0
-    ip6 nexthdr icmpv6 icmpv6 type echo-request drop
-    ip6 nexthdr icmpv6 log prefix "NFT-ICMPv6: " group 0
-    ip6 nexthdr icmpv6 drop
+        # 4. LOG & DROP ICMP (IPv4)
+        ip protocol icmp icmp type echo-request log prefix "NFT-ICMP-ECHO: " group 0
+        ip protocol icmp icmp type echo-request drop
+        ip protocol icmp log prefix "NFT-ICMP: " group 0
+        ip protocol icmp drop
 
-    # 6. Log and drop everything else inbound
-    log prefix "NFT-DROP-IN: " group 0
-    drop
-  }
+        # 5. LOG & DROP ICMPv6 (IPv6)
+        ip6 nexthdr icmpv6 icmpv6 type echo-request log prefix "NFT-ICMPv6-ECHO: " group 0
+        ip6 nexthdr icmpv6 icmpv6 type echo-request drop
+        ip6 nexthdr icmpv6 log prefix "NFT-ICMPv6: " group 0
+        ip6 nexthdr icmpv6 drop
 
-  chain forward {
-    type filter hook forward priority 0; policy drop;
+        # 6. Log and drop everything else inbound
+        log prefix "NFT-DROP-IN: " group 0
+        drop
+    }
 
-    # 1. Accept established/related
-    ct state established,related accept
+    chain forward {
+        type filter hook forward priority 0; policy drop;
 
-    # 2. Allow forwarding between Docker containers and external networks
-    iifname "docker0" accept
-    oifname "docker0" accept
+        # 1. Accept established/related
+        ct state established,related accept
 
-    # 3. Log and drop everything else
-    log prefix "NFT-DROP-FWD: " group 0
-    drop
-  }
+        # 2. Allow forwarding between Docker containers and external networks
+        iifname "docker0" accept
+        oifname "docker0" accept
 
-  chain output {
-    type filter hook output priority 0; policy accept;
-    # Typically we allow outbound on a desktop, but feel free to restrict here.
-  }
+        # 3. Log and drop everything else
+        log prefix "NFT-DROP-FWD: " group 0
+        drop
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+        # Typically we allow outbound on a desktop, but feel free to restrict here.
+    }
 }
 
 
@@ -64,24 +75,24 @@ table inet filter {
 ############################
 table ip nat {
 
-  chain prerouting {
-    type nat hook prerouting priority -100; policy accept;
-    # (Add port-forwarding rules here if needed)
-  }
+    chain prerouting {
+        type nat hook prerouting priority -100; policy accept;
+        # (Add port-forwarding rules here if needed)
+    }
 
-  chain input {
-    type nat hook input priority 100; policy accept;
-  }
+    chain input {
+        type nat hook input priority 100; policy accept;
+    }
 
-  chain output {
-    type nat hook output priority -100; policy accept;
-  }
+    chain output {
+        type nat hook output priority -100; policy accept;
+    }
 
-  chain postrouting {
-    type nat hook postrouting priority 100; policy accept;
+    chain postrouting {
+        type nat hook postrouting priority 100; policy accept;
 
-    # NAT (masquerade) for Docker default subnet
-    # so containers can access external networks
-    ip saddr 172.17.0.0/16 oifname != "docker0" masquerade
-  }
+        # NAT (masquerade) for Docker default subnet
+        # so containers can access external networks
+        ip saddr 172.17.0.0/16 oifname != "docker0" masquerade
+    }
 }

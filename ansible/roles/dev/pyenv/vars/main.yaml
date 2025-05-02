@@ -9,12 +9,12 @@ pyenv_root: "{{ ansible_env.HOME }}/.pyenv"
 
 # List of dependencies required for building Python
 pyenv_dependencies:
-  - gcc
-  - make
-  - openssl-devel
-  - tk-devel
-  - xz-devel
-  - sqlite-devel
-  - readline-devel
-  - curl
-  - wget
+    - gcc
+    - make
+    - openssl-devel
+    - tk-devel
+    - xz-devel
+    - sqlite-devel
+    - readline-devel
+    - curl
+    - wget

@@ -3,6 +3,5 @@ arpwatch_workdir: "/var/lib/arpwatch"
 arpwatch_user: "root"
 arpwatch_interface: "enp0s3"
 arpwatch_options: ""
-
 # arpwatch_network: "10.0.2.0/24"
 #arp_options: "-n {{ arpwatch_network }} -i {{ arpwatch_interface }} -f {{ arpwatch_data_file }}"

@@ -4,15 +4,17 @@ vscode_gpg_key_url: "https://packages.microsoft.com/keys/microsoft.asc"
 vscode_gpg_file: "{{ apt_gpg_dir }}/vscode.gpg"
 
 vscode_extensions:
-  - waderyan.gitblame
-  - streetsidesoftware.code-spell-checker
-  - fill-labs.dependi
-  - ms-azuretools.vscode-docker
-  - ms-python.python
-  - rust-lang.rust-analyzer
-  - shardulm94.trailing-spaces
-  - christian-kohler.path-intellisense
-  - tamasfe.even-better-toml
-  - formulahendry.code-runner
-  - njpwerner.autodocstring
-  - Gruntfuggly.todo-tree
+    - waderyan.gitblame
+    - streetsidesoftware.code-spell-checker
+    - fill-labs.dependi
+    - ms-azuretools.vscode-docker
+    - ms-python.python
+    - rust-lang.rust-analyzer
+    - shardulm94.trailing-spaces
+    - christian-kohler.path-intellisense
+    - tamasfe.even-better-toml
+    - formulahendry.code-runner
+    - njpwerner.autodocstring
+    - Gruntfuggly.todo-tree
+    - GitHub.copilot
+    - GitHub.copilot-chat

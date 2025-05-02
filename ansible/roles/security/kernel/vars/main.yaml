@@ -27,22 +27,22 @@ sysctl_parameters:
     - { key: "kernel.unprivileged_bpf_disabled", value: 1 }
     - { key: "kernel.yama.ptrace_scope", value: 2 }
     - { key: "net.core.bpf_jit_harden", value: 2 }
-    - { key: "fs.suid_dumpable", value: 0 }                                # ubuntu
-    - { key: "kernel.core_uses_pid", value: 1 }                            # ubuntu
-    - { key: "net.ipv4.conf.default.accept_source_route", value: 0 }       # ubuntu
+    - { key: "fs.suid_dumpable", value: 0 } # ubuntu
+    - { key: "kernel.core_uses_pid", value: 1 } # ubuntu
+    - { key: "net.ipv4.conf.default.accept_source_route", value: 0 } # ubuntu
     - { key: "net.ipv4.conf.default.log_martians", value: 1 }
     - { key: "net.ipv4.conf.all.forwarding", value: 0 }
     - { key: "net.ipv4.conf.all.rp_filter", value: 1 }
     - { key: "net.ipv4.conf.all.send_redirects", value: 0 }
     - { key: "net.ipv6.conf.all.accept_redirects", value: 0 }
     - { key: "net.ipv6.conf.default.accept_redirects", value: 0 }
-    - { key: "kernel.randomize_va_space", value: 2 }               # Enable ASLR
-    - { key: "kernel.kptr_restrict", value: 2 }                    # Restrict kernel pointer access
-    - { key: "kernel.dmesg_restrict", value: 1 }                   # Restrict dmesg logs
-    - { key: "fs.suid_dumpable", value: 0 }                        # Disable SUID dumps
-    - { key: "net.ipv4.tcp_syncookies", value: 1 }                 # Enable SYN flood protection
-    - { key: "net.ipv4.ip_forward", value: 0 }                     # Disable IP forwarding
-    - { key: "net.ipv4.conf.all.accept_redirects", value: 0 }      # Disable ICMP redirects
-    - { key: "net.ipv4.conf.default.accept_redirects", value: 0 }  # Disable ICMP redirects (default)
-    - { key: "net.ipv4.conf.all.log_martians", value: 1 }          # Log suspicious packets
-    - { key: "net.ipv6.conf.all.disable_ipv6", value: 1 }          # Disable IPv6 (if not needed)
+    - { key: "kernel.randomize_va_space", value: 2 } # Enable ASLR
+    - { key: "kernel.kptr_restrict", value: 2 } # Restrict kernel pointer access
+    - { key: "kernel.dmesg_restrict", value: 1 } # Restrict dmesg logs
+    - { key: "fs.suid_dumpable", value: 0 } # Disable SUID dumps
+    - { key: "net.ipv4.tcp_syncookies", value: 1 } # Enable SYN flood protection
+    - { key: "net.ipv4.ip_forward", value: 0 } # Disable IP forwarding
+    - { key: "net.ipv4.conf.all.accept_redirects", value: 0 } # Disable ICMP redirects
+    - { key: "net.ipv4.conf.default.accept_redirects", value: 0 } # Disable ICMP redirects (default)
+    - { key: "net.ipv4.conf.all.log_martians", value: 1 } # Log suspicious packets
+    - { key: "net.ipv6.conf.all.disable_ipv6", value: 1 } # Disable IPv6 (if not needed)

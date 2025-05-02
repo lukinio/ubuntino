@@ -2,36 +2,34 @@
 - name: Ensure systemd-resolved drop-in directory exists
   become: yes
   ansible.builtin.file:
-    path: /etc/systemd/resolved.conf.d
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
+      path: /etc/systemd/resolved.conf.d
+      state: directory
+      owner: root
+      group: root
+      mode: "0755"
   register: drop_in_dir_result
 
 - name: Debug directory creation status
   ansible.builtin.debug:
-    msg: "Directory /etc/systemd/resolved.conf.d was {{ 'created' if drop_in_dir_result.changed else 'already present' }}."
-
+      msg: "Directory /etc/systemd/resolved.conf.d was {{ 'created' if drop_in_dir_result.changed else 'already present' }}."
 
 - name: Drop DNS over TLS configuration into systemd-resolved
   become: yes
   ansible.builtin.copy:
-    dest: /etc/systemd/resolved.conf.d/dns-over-tls.conf
-    content: |
-      [Resolve]
-      DNS={{ dns_servers | join(' ') }}
-      DNSOverTLS=yes
-      DNSSEC=yes
-    owner: root
-    group: root
-    mode: "0644"
+      dest: /etc/systemd/resolved.conf.d/dns-over-tls.conf
+      content: |
+          [Resolve]
+          DNS={{ dns_servers | join(' ') }}
+          DNSOverTLS=yes
+          DNSSEC=yes
+      owner: root
+      group: root
+      mode: "0644"
   notify: Restart systemd-resolved
   register: config_result
 
 - name: Debug DNS over TLS configuration status
   ansible.builtin.debug:
-    msg: >
-      DNS over TLS configuration file {{ '/etc/systemd/resolved.conf.d/dns-over-tls.conf' }}
-      was {{ 'created and updated' if config_result.changed else 'already configured' }}.
-
+      msg: >
+          DNS over TLS configuration file {{ '/etc/systemd/resolved.conf.d/dns-over-tls.conf' }}
+          was {{ 'created and updated' if config_result.changed else 'already configured' }}.

@@ -1,11 +1,11 @@
 # Log ICMP traffic
-if ($msg contains "NFT-ICMP") then {
+if ($msg contains "NFT_IN_ACCEPT_ICMP") then {
     action(type="omfile" file="/var/log/nft_icmp.log" dirCreateMode="0755" fileCreateMode="0640")
     stop
 }
 
 # Custom logging for nftables
-if ($msg contains "NFT-") then {
+if ($msg contains "NFT_") then {
     action(type="omfile" file="/var/log/nftables.log" dirCreateMode="0755" fileCreateMode="0640")
     stop
 }

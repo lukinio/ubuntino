@@ -2,11 +2,11 @@
 - name: Use secure banners
   become: yes
   ansible.builtin.template:
-    src: secure_banner.j2
-    dest: "{{ item }}"
-    owner: root
-    group: root
-    mode: "0644"
+      src: secure_banner.j2
+      dest: "{{ item }}"
+      owner: root
+      group: root
+      mode: "0644"
   loop:
-    - /etc/issue
-    - /etc/issue.net
+      - /etc/issue
+      - /etc/issue.net

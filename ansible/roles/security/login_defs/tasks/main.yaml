@@ -2,65 +2,65 @@
 - name: Configure password hashing rounds in /etc/login.defs
   become: yes
   ansible.builtin.lineinfile:
-    path: /etc/login.defs
-    regexp: '^#?ENCRYPT_METHOD'
-    line: "ENCRYPT_METHOD {{ password_hashing_method }}"
-    state: present
+      path: /etc/login.defs
+      regexp: "^#?ENCRYPT_METHOD"
+      line: "ENCRYPT_METHOD {{ password_hashing_method }}"
+      state: present
 
 - name: Set password hashing rounds in /etc/login.defs
   become: yes
   ansible.builtin.lineinfile:
-    path: /etc/login.defs
-    regexp: '^#?SHA_CRYPT_MIN_ROUNDS'
-    line: "SHA_CRYPT_MIN_ROUNDS {{ password_min_rounds }}"
-    state: present
+      path: /etc/login.defs
+      regexp: "^#?SHA_CRYPT_MIN_ROUNDS"
+      line: "SHA_CRYPT_MIN_ROUNDS {{ password_min_rounds }}"
+      state: present
 
 - name: Set minimum password age in /etc/login.defs
   become: yes
   ansible.builtin.lineinfile:
-    path: /etc/login.defs
-    regexp: '^#?PASS_MIN_DAYS'
-    line: "PASS_MIN_DAYS {{ password_min_age }}"
-    state: present
+      path: /etc/login.defs
+      regexp: "^#?PASS_MIN_DAYS"
+      line: "PASS_MIN_DAYS {{ password_min_age }}"
+      state: present
 
 - name: Set maximum password age in /etc/login.defs
   become: yes
   ansible.builtin.lineinfile:
-    path: /etc/login.defs
-    regexp: '^#?PASS_MAX_DAYS'
-    line: "PASS_MAX_DAYS {{ password_max_age }}"
-    state: present
+      path: /etc/login.defs
+      regexp: "^#?PASS_MAX_DAYS"
+      line: "PASS_MAX_DAYS {{ password_max_age }}"
+      state: present
 
 - name: Enforce strong password policies
   become: yes
   lineinfile:
-    path: /etc/security/pwquality.conf
-    regexp: '^{{ item.key }}'
-    line: "{{ item.key }} = {{ item.value }}"
+      path: /etc/security/pwquality.conf
+      regexp: "^{{ item.key }}"
+      line: "{{ item.key }} = {{ item.value }}"
   with_items:
-    - { key: minlen, value: 14 }
-    - { key: dcredit, value: -1 }
-    - { key: ucredit, value: -1 }
-    - { key: lcredit, value: -1 }
-    - { key: ocredit, value: -1 }
-    - { key: min_rounds, value: 5000 }
+      - { key: minlen, value: 14 }
+      - { key: dcredit, value: -1 }
+      - { key: ucredit, value: -1 }
+      - { key: lcredit, value: -1 }
+      - { key: ocredit, value: -1 }
+      - { key: min_rounds, value: 5000 }
 
 - name: Configure TMOUT for session timeout
   become: yes
   ansible.builtin.template:
-    src: timeout.sh.j2
-    dest: /etc/profile.d/timeout.sh
-    owner: root
-    group: root
-    mode: '0755'
+      src: timeout.sh.j2
+      dest: /etc/profile.d/timeout.sh
+      owner: root
+      group: root
+      mode: "0755"
 
 - name: Set umask to {{ default_umask }} in configuration files
   become: yes
   ansible.builtin.replace:
-    path: "{{ item }}"
-    regexp: '^(.*)([Uu][Mm][Aa][Ss][Kk])\s+\d{3}'
-    replace: '\1\2 {{ default_umask }}'
-    backup: yes
+      path: "{{ item }}"
+      regexp: '^(.*)([Uu][Mm][Aa][Ss][Kk])\s+\d{3}'
+      replace: '\1\2 {{ default_umask }}'
+      backup: yes
   loop:
-    - /etc/profile
-    - /etc/login.defs
+      - /etc/profile
+      - /etc/login.defs

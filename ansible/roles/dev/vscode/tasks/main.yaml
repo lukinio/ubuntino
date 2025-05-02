@@ -6,3 +6,7 @@
 - name: Install VS Code plugins
   include_tasks: install_plugins.yaml
   when: install_plugins | default(false)
+
+- name: Install VS Code config
+  include_tasks: install_config.yaml
+  when: install_config | default(false)

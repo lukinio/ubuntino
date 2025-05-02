@@ -1,73 +1,67 @@
 ---
--
-    name: Check if snapd is installed
-    become: yes
-    ansible.builtin.command: dpkg-query -W -f='${Status}' snapd
-    register: snapd_check
-    ignore_errors: yes
-    failed_when: false
+- name: Check if snapd is installed
+  become: yes
+  ansible.builtin.command: dpkg-query -W -f='${Status}' snapd
+  register: snapd_check
+  ignore_errors: yes
+  failed_when: false
 
--
-    name: Remove all installed snap packages
-    become: yes
-    ansible.builtin.command:
-        cmd: snap remove --purge "{{ item }}"
-    loop:
-        - firefox
-        - gnome-42-2204
-        - gtk-common-themes
-        - snap-store
-        - firmware-updater
-        - snapd-desktop-integration
-        - prompting-client
-        - desktop-security-center
-        - core22
-        - bare
-        - snapd
+- name: Remove all installed snap packages
+  become: yes
+  ansible.builtin.command:
+      cmd: snap remove --purge "{{ item }}"
+  loop:
+      - firefox
+      - gnome-42-2204
+      - gtk-common-themes
+      - snap-store
+      - firmware-updater
+      - snapd-desktop-integration
+      - prompting-client
+      - desktop-security-center
+      - core22
+      - bare
+      - snapd
 
-    register: snap_removal
-    changed_when: snap_removal.stdout is not search('not installed')
-    when: "'install ok installed' in snapd_check.stdout"
+  register: snap_removal
+  changed_when: snap_removal.stdout is not search('not installed')
+  when: "'install ok installed' in snapd_check.stdout"
 
--
-    name: Unmount Snap core packages
-    become: yes
-    ansible.builtin.command:
-        cmd: umount /run/snapd/ns
-    ignore_errors: yes
-    when: "'install ok installed' in snapd_check.stdout"
+- name: Unmount Snap core packages
+  become: yes
+  ansible.builtin.command:
+      cmd: umount /run/snapd/ns
+  ignore_errors: yes
+  when: "'install ok installed' in snapd_check.stdout"
 
--
-    name: Remove snapd packages
-    become: yes
-    ansible.builtin.package:
-        name:
-            - snapd
-            - snapd-desktop-integration
-        state: absent
-    when: "'install ok installed' in snapd_check.stdout"
+- name: Remove snapd packages
+  become: yes
+  ansible.builtin.package:
+      name:
+          - snapd
+          - snapd-desktop-integration
+      state: absent
+  when: "'install ok installed' in snapd_check.stdout"
 
--
-    name: Remove snap-related directories
-    become: yes
-    ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-    loop:
-        - /snap
-        - /var/snap
-        - /var/lib/snapd
-        - /var/cache/snapd
-        - /etc/systemd/system/snapd.service
-        - /etc/systemd/system/snapd.socket
-        - /etc/apparmor.d/usr.lib.snapd.snap-confine.real
+- name: Remove snap-related directories
+  become: yes
+  ansible.builtin.file:
+      path: "{{ item }}"
+      state: absent
+  loop:
+      - /snap
+      - /var/snap
+      - /var/lib/snapd
+      - /var/cache/snapd
+      - /etc/systemd/system/snapd.service
+      - /etc/systemd/system/snapd.socket
+      - /etc/apparmor.d/usr.lib.snapd.snap-confine.real
 
--
-    name: Add apt preferences for snapd
-    become: yes
-    ansible.builtin.template:
-        src: snapd_preferences.j2
-        dest: /etc/apt/preferences.d/nosnap.pref
-        owner: root
-        group: root
-        mode: '0644'
+- name: Add apt preferences for snapd
+  become: yes
+  ansible.builtin.template:
+      src: snapd_preferences.j2
+      dest: /etc/apt/preferences.d/nosnap.pref
+      owner: root
+      group: root
+      mode: "0644"

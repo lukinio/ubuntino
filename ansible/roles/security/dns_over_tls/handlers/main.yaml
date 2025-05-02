@@ -2,6 +2,6 @@
 - name: Restart systemd-resolved
   become: yes
   ansible.builtin.service:
-    name: systemd-resolved
-    state: restarted
-    enabled: yes
+      name: systemd-resolved
+      state: restarted
+      enabled: yes

@@ -2,22 +2,22 @@
 - name: Install Python versions using pyenv
   shell: "pyenv install -s {{ item }}"
   args:
-    executable: /bin/bash
-    creates: "{{ pyenv_root }}/versions/{{ item }}"
+      executable: /bin/bash
+      creates: "{{ pyenv_root }}/versions/{{ item }}"
   loop: "{{ python_versions }}"
   environment:
-    PYENV_ROOT: "{{ ansible_env.HOME }}/.pyenv"
-    PATH: "{{ ansible_env.HOME }}/.pyenv/bin:{{ ansible_env.HOME }}/.pyenv/shims:{{ ansible_env.PATH }}"
+      PYENV_ROOT: "{{ ansible_env.HOME }}/.pyenv"
+      PATH: "{{ ansible_env.HOME }}/.pyenv/bin:{{ ansible_env.HOME }}/.pyenv/shims:{{ ansible_env.PATH }}"
   register: pyenv_install_results
 
 - name: Set Python {{ global_python_version }} as the global version
   shell: pyenv global {{ global_python_version }}
   args:
-    executable: /bin/bash
+      executable: /bin/bash
   environment:
-    PYENV_ROOT: "{{ ansible_env.HOME }}/.pyenv"
-    PATH: "{{ ansible_env.HOME }}/.pyenv/bin:{{ ansible_env.HOME }}/.pyenv/shims:{{ ansible_env.PATH }}"
+      PYENV_ROOT: "{{ ansible_env.HOME }}/.pyenv"
+      PATH: "{{ ansible_env.HOME }}/.pyenv/bin:{{ ansible_env.HOME }}/.pyenv/shims:{{ ansible_env.PATH }}"
 
 - name: Print pyenv installation results
   debug:
-    msg: "{{ pyenv_install_results.results }}"
+      msg: "{{ pyenv_install_results.results }}"

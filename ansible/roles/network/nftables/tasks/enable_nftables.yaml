@@ -2,47 +2,47 @@
 - name: Remove other firewall packages
   become: yes
   ansible.builtin.package:
-    name:
-      - ufw
-      - iptables
-      - gufw
-    state: absent
+      name:
+          - ufw
+          - iptables
+          - gufw
+      state: absent
 
 - name: Install nftables package
   become: yes
   ansible.builtin.package:
-    name: nftables
-    state: present
+      name: nftables
+      state: present
 
 - name: Apply nftables rules
   become: yes
   ansible.builtin.template:
-    src: nftables.conf.j2
-    dest: /etc/nftables.conf
-    owner: root
-    group: root
-    mode: '0644'
+      src: nftables.conf.j2
+      dest: /etc/nftables.conf
+      owner: root
+      group: root
+      mode: "0644"
   notify: Reload nftables
 
 - name: Ensure rsyslog is installed
   ansible.builtin.package:
-    name: rsyslog
-    state: present
+      name: rsyslog
+      state: present
   become: yes
 
 - name: Enable and start rsyslog service
   ansible.builtin.service:
-    name: rsyslog
-    enabled: yes
-    state: started
+      name: rsyslog
+      enabled: yes
+      state: started
   become: yes
 
 - name: Add custom nftables logging rule to rsyslog
   ansible.builtin.template:
-    src: nftables-log.conf.j2
-    dest: /etc/rsyslog.d/nftables-log.conf
-    owner: root
-    group: root
-    mode: '0644'
+      src: nftables-log.conf.j2
+      dest: /etc/rsyslog.d/nftables-log.conf
+      owner: root
+      group: root
+      mode: "0644"
   become: yes
   notify: Restart rsyslog

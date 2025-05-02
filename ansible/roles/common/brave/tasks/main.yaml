@@ -2,27 +2,22 @@
 - name: Add Brave GPG key
   become: yes
   ansible.builtin.shell: |
-    curl -fsSL {{ brave_gpg_key_url }} | gpg --dearmor -o {{ brave_gpg_file }}
+      curl -fsSL {{ brave_gpg_key_url }} | gpg --dearmor -o {{ brave_gpg_file }}
   args:
-    creates: "{{ brave_gpg_file }}"
+      creates: "{{ brave_gpg_file }}"
 
 - name: Add Brave repository file
   become: yes
   ansible.builtin.template:
-    src: brave-browser.list.j2
-    dest: "{{ brave_repo_file }}"
-    owner: root
-    group: root
-    mode: "0644"
-
-# - name: Refresh apt cache
-#   become: yes
-#   ansible.builtin.apt:
-#     update_cache: yes
+      src: brave-browser.list.j2
+      dest: "{{ brave_repo_file }}"
+      owner: root
+      group: root
+      mode: "0644"
 
 - name: Install Brave browser
   become: yes
   ansible.builtin.apt:
-    name: brave-browser
-    update_cache: yes
-    state: present
+      name: brave-browser
+      update_cache: yes
+      state: present

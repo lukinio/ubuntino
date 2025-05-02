@@ -1,0 +1,99 @@
+{
+    // Editor Basics
+    "editor.tabSize": 4, // use 4 spaces
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false, // don’t override per-file
+    "editor.formatOnSave": true, // auto-format on save
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true // tidy imports on save
+    },
+
+    // YAML-Specific Formatter Binding
+    "[yaml]": {
+        // Use Prettier to format YAML files
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 4 // display 4 spaces per indent in the editor
+    },
+
+    // JSON-Specific Formatter Binding
+    "[json]": {
+        // Use Prettier to format JSON files
+        "editor.defaultFormatter": "esbenp.prettier-vscode", // Prettier extension :contentReference[oaicite:3]{index=3}
+        "editor.tabSize": 4 // Display 4 spaces per indent in the editor :contentReference[oaicite:4]{index=4}
+    },
+
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Prettier Configuration
+    // Indentation: 4 spaces (overrides default of 2) :contentReference[oaicite:1]{index=1}
+    "prettier.tabWidth": 4,
+    "prettier.useTabs": false,
+
+    // Maximum “desired” line length: 140 :contentReference[oaicite:2]{index=2}
+    "prettier.printWidth": 140,
+
+    // Ensure trailing whitespace is trimmed :contentReference[oaicite:3]{index=3}
+    "prettier.trimTrailingWhitespace": true,
+
+    // Disable VS Code’s built-in JSON formatter so Prettier is the only formatter
+    "json.format.enable": false, // Prevent conflicts with default formatter :contentReference[oaicite:8]{index=8}
+
+    // File Associations
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.formatOnSave": true
+    },
+
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true
+    },
+
+    // Python Settings
+    "python.defaultInterpreterPath": "python3",
+    "python.languageServer": "Pylance",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": false,
+    "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length", "140"],
+    "python.sortImports.args": ["--profile", "black"],
+
+    // Rust Settings
+    "rust-analyzer.checkOnSave.command": "clippy",
+    "rust-analyzer.cargo.features": "all",
+    "rust-analyzer.procMacro.enable": true,
+    "rust-analyzer.inlayHints.enable": true,
+    "rust-analyzer.imports.granularity.group": "module",
+    "rust-analyzer.imports.prefix": "self",
+
+    // Extensions Configuration
+    "files.associations": {
+        "*.rs": "rust",
+        "Cargo.toml": "toml"
+    },
+    "codelens.enable": true,
+    "breadcrumbs.enabled": true,
+
+    // Git integration
+    "git.autofetch": true
+}

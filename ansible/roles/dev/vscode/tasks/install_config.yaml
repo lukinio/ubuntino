@@ -1,0 +1,8 @@
+---
+- name: Configure VS Code repository
+  ansible.builtin.template:
+      src: settings.json
+      dest: /home/{{ user }}/.config/Code/User/settings.json
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: "0644"

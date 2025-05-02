@@ -2,5 +2,5 @@
 - name: Restart USBGuard service
   become: yes
   ansible.builtin.service:
-    name: usbguard
-    state: restarted
+      name: usbguard
+      state: restarted
